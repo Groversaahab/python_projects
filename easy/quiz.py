@@ -68,10 +68,15 @@ def user_query(score, question_num, questions, answers, protest_answers, status)
         print("Any other query? write code: ", end="")
         user_query(score, question_num, questions, answers, protest_answers, status)
 
+# ----------Intro------------
+
 print("Welcome to my quiz!!!")
 print("Type name to start")
 name = input()
 print(f"Hi {name}!!")
+
+# ----------Rules-------------
+
 print("Please read these rules:(press enter after reading the rule)")
 print("1. For each correct answer you get +1 point.", end="")
 input()
@@ -86,16 +91,19 @@ print("No other code is supported, submiting any other text will automatically l
 input()
 print("4. A repeated question gets half the points")
 input()
+
+# -----------Number of questions------------
+
 print(f"Thats all for the rules, please choose the number of question between 1 and {total_questions}")
 user_num = input()
-user_num_check(user_num)
+user_num_check(user_num)            # Checks if the number is valid
+# -------------Quiz begins-----------------
 print("Let the Games Beginn!!!")
-question_numbers = question_chooser(user_num, total_questions)
-
-for i in question_numbers:
-    status = 0
-    quizer(i, questions, answers, score, 0)
-    user_query(score, i, questions, answers, protest_answers, status)
-
+question_numbers = question_chooser(user_num, total_questions)       # Chooses random questions
+for i in question_numbers:          # Questions
+    status = 0          # Status of the current questions (right or wrong)
+    quizer(i, questions, answers, score, 0)         # Asks question, checks answer and updates score
+    user_query(score, i, questions, answers, protest_answers, status)           # Query for user
+# --------------Outro------------------
 print("Thanks for playing")
 print(f"Your score is: {score}")
