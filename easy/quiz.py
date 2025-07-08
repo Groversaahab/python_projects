@@ -1,14 +1,22 @@
 import random
 
-def quizer(question, answer, score):
-    print(question)
+questions = [0]*10
+answers = [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]
+
+def quizer(question_num, questions, answer, score, repeat, status):
+    print(questions[question_num])
     user_answer = input()
-    if user_answer in answer:
+    if user_answer in answer[question_num]:
         print("Correct Answer!!")
         print("Score + 1")
-        score += 1
+        if repeat:
+            score += 0.5
+        else:
+            score += 1
+        status = 1
     else:
         print("Wrong Answer :(")
+        status = 0
 
 def question_chooser(user_num, question_num):
     rand_nums = []
@@ -31,6 +39,30 @@ def user_num_check(user_num):
     except:
         print("Write a number between 1 and 10 including 1 and 10")
 
+def user_query(score, question_num, questions, answers, protest_answers, status):
+    code = input()
+    if code == "score":
+        print(score)
+        print("Any other query? write code: ", end="")
+        user_query(score, question_num, questions, answers, protest_answers, status)
+    elif code == "protest":
+        print("Please repeat your answer")
+        print(questions[question_num])
+        protest_answers.append([questions[question_num], input()])
+        print("Your answer has been recorded for review")
+        print("Any other query? write code: ", end="")
+        user_query(score, question_num, questions, answers, protest_answers, status)
+    elif code == "answer":
+        print(answers[question_num])
+        print("Any other query? write code: ", end="")
+        user_query(score, question_num, questions, answers, protest_answers, status)
+    elif code == "repeat":
+        if status == 0:
+            quizer(question_num, questions, answers, score, 1)
+        elif status == 1:
+            print("Can't repeat a correctly answered question")
+        print("Any other query? write code: ", end="")
+        user_query(score, question_num, questions, answers, protest_answers, status)
 
 print("Welcome to my quiz!!!")
 print("Type name to start")
@@ -41,7 +73,7 @@ print("1. For each correct answer you get +1 point.", end="")
 input()
 print("2. For each wrong answer you get +0 point", end="")
 input()
-print("3. After answering any question you may raise a query by using the following codes:")
+print("3. After answering any question you may raise a query by using the following codes:(press enter to skip query)")
 print("'score' for your current score")
 print("'protest' if you think your answer is correct")
 print("'answer' for answer list")
