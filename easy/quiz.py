@@ -1,9 +1,12 @@
 import random
 
+total_questions = 10
 questions = [0]*10
 answers = [[0], [0], [0], [0], [0], [0], [0], [0], [0], [0]]
+score = 0
+protest_answers = []
 
-def quizer(question_num, questions, answer, score, repeat, status):
+def quizer(question_num, questions, answer, score, repeat):
     print(questions[question_num])
     user_answer = input()
     if user_answer in answer[question_num]:
@@ -18,20 +21,20 @@ def quizer(question_num, questions, answer, score, repeat, status):
         print("Wrong Answer :(")
         status = 0
 
-def question_chooser(user_num, question_num):
+def question_chooser(user_num, total_questions):
     rand_nums = []
     for i in range(user_num):
-        rand_num = random.randint(0, question_num-1)
+        rand_num = random.randint(0, total_questions-1)
         while rand_num in rand_nums:
-            rand_num = random.randint(0, question_num-1)
+            rand_num = random.randint(0, total_questions-1)
         rand_nums.append(rand_num)
     return rand_nums
 
 def user_num_check(user_num):
     if user_num == 0:
         print("A smart one aren't you, anyway thanks for your time")
-    elif user_num not in range(1, 10):
-        print("Score = -1, a dumb one aren't you choose between 1, 2, 3, 4, 5, 6, 7, 8, 9, 10")
+    elif user_num not in range(1, total_questions):
+        print(f"Score = -1, a dumb one aren't you choose between 1 and {total_questions}")
         user_num = input()
         user_num_check(user_num)
     try:
@@ -40,9 +43,10 @@ def user_num_check(user_num):
         print("Write a number between 1 and 10 including 1 and 10")
 
 def user_query(score, question_num, questions, answers, protest_answers, status):
+    print("query: ", end="")
     code = input()
     if code == "score":
-        print(score)
+        print(f"Current score: {score}")
         print("Any other query? write code: ", end="")
         user_query(score, question_num, questions, answers, protest_answers, status)
     elif code == "protest":
@@ -82,8 +86,16 @@ print("No other code is supported, submiting any other text will automatically l
 input()
 print("4. A repeated question gets half the points")
 input()
-print("Thats all for the rules, please choose the number of question between 1 and 10")
+print(f"Thats all for the rules, please choose the number of question between 1 and {total_questions}")
 user_num = input()
 user_num_check(user_num)
 print("Let the Games Beginn!!!")
-question_numbers = question_chooser(user_num, 10)
+question_numbers = question_chooser(user_num, total_questions)
+
+for i in question_numbers:
+    status = 0
+    quizer(i, questions, answers, score, 0)
+    user_query(score, i, questions, answers, protest_answers, status)
+
+print("Thanks for playing")
+print(f"Your score is: {score}")
