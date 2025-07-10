@@ -20,3 +20,13 @@ def save_master_password(username: str, password: str):
         loaded_dict[username] = hashed_password
         json.dumps(loaded_dict, indent=4)
         file.close()
+
+def delete_user(username: str, password: str):
+    if verify_master_password(username, password):
+        with open("./manager/username_data.json", "w+") as file:
+            loaded_dict = json.load(file)
+            del loaded_dict[username]
+            json.dumps(loaded_dict, indent=4)
+            file.close()
+    else:
+        print("Wrong master password!!!")

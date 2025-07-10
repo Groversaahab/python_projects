@@ -7,16 +7,20 @@ from manager import auth
 sys.path.append("./manager/")
 
 # -----functions for application of calls-------
+# -----making new user--------       Done
 
 def new_master(args):
     username = args.read[0]
     master_password = args.read[1]
     auth.save_master_password(username, master_password)
 
+# -----Opening Vault using master password--------         Passwored authentication --done
+#                                                          Opening vault            --tobedone
+
 def vault_open(args):
     username = args.read[0]
     master_password = args.read[1]
-    if master_password == auth.verify_master_password(username, master_password):
+    if auth.verify_master_password(username, master_password):
         # Code
         filler = 1
     else:
@@ -47,9 +51,13 @@ def show_all():
 def close_vault():
     close = 1
 
+# -----Deleting vault using master password--------      Deleting username and password from file --done
+#                                                        Deleting vault                           --done
+
 def delete_vault(args):
     username = args.read[0]
     master_password = args.read[1]
+    auth.delete_user(username, master_password)
 
 # -----Description for the CLI(command line interface)-------
 
