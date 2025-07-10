@@ -3,6 +3,7 @@ pyvenv.cfg
 bin/
 include/
 lib/
+.vscode/
 
 # Python cache
 __pycache__/
