@@ -1,5 +1,6 @@
 import argparse
 import sys
+from manager import auth
 
 # -----paths for the used files------
 
@@ -10,10 +11,16 @@ sys.path.append("./manager/")
 def new_master(args):
     username = args.read[0]
     master_password = args.read[1]
+    auth.save_master_password(username, master_password)
 
 def vault_open(args):
     username = args.read[0]
     master_password = args.read[1]
+    if master_password == auth.verify_master_password(username, master_password):
+        # Code
+        filler = 1
+    else:
+        print("wrong master password!!!")
 
 def add_password(args):
     tag = args.read[0]
