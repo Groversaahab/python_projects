@@ -1,10 +1,8 @@
 import argparse
 import sys
-import bcrypt
 
 # -----paths for the used files------
 
-sys.path.append("../../lib/")
 sys.path.append("./manager/")
 
 # -----functions for application of calls-------
