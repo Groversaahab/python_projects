@@ -1,8 +1,8 @@
 # Virtual environment
+pyvenv.cfg
 bin/
 include/
 lib/
-pyvenv.cfg
 
 # Python cache
 __pycache__/
