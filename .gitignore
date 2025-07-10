@@ -4,6 +4,7 @@ bin/
 include/
 lib/
 .vscode/
+advanced/password_manager/manager/username_data.json
 
 # Python cache
 __pycache__/
