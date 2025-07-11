@@ -91,4 +91,3 @@ def vault_del(tag:str):
         file.seek(0)
         json.dump(loaded_dict, file, indent=4)
         file.truncate()
-
