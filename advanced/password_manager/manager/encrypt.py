@@ -27,14 +27,14 @@ def salt_generator(username: str) -> bytes:
     hashed_username = bcrypt.hashpw(username_bytes, bcrypt.gensalt())
     return hashed_username
 
-def incrypt_data(data: str, key: bytes) -> bytes:
+def encrypt_data(data: str, key: bytes) -> bytes:
     f = Fernet(key)
-    incrypted_data = f.encrypt(data.encode())
-    return incrypted_data
+    encrypted_data = f.encrypt(data.encode())
+    return encrypted_data
 
-def decrypt_data(increpted_data: str, key: bytes) -> str:
+def decrypt_data(encrypted_data: str, key: bytes) -> str:
     f = Fernet(key)
-    decrypted_data = f.decrypt(increpted_data).decode()
+    decrypted_data = f.decrypt(encrypted_data.encode()).decode()
     return decrypted_data
 
 def save_key(username: str, key:bytes):
@@ -63,8 +63,8 @@ def username_key_access() -> list:
 
 def vault_append(tag: str, username: str, password: str):
     [master_username, key] = username_key_access()
-    encrypted_username = incrypt_data(username, key).decode()
-    encrypted_password = incrypt_data(password, key).decode()
+    encrypted_username = encrypt_data(username, key).decode()
+    encrypted_password = encrypt_data(password, key).decode()
     encrypted_creds = [encrypted_username, encrypted_password]
     with open(f"./data/{master_username}.json", "r+") as file:
         loaded_dict = json.load(file)
