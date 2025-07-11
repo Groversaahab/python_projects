@@ -10,16 +10,16 @@ sys.path.append("./manager/")
 # -----making new user--------       Done
 
 def new_master(args):
-    username = args.read[0]
-    master_password = args.read[1]
+    username = args.newmaster[0]
+    master_password = args.newmaster[1]
     auth.save_master_password(username, master_password)
 
 # -----Opening Vault using master password--------         Passwored authentication --done
 #                                                          Opening vault            --tobedone
 
 def vault_open(args):
-    username = args.read[0]
-    master_password = args.read[1]
+    username = args.vaultopen[0]
+    master_password = args.vaultopen[1]
     if auth.verify_master_password(username, master_password):
         # Code
         filler = 1
@@ -27,20 +27,20 @@ def vault_open(args):
         print("wrong master password!!!")
 
 def add_password(args):
-    tag = args.read[0]
-    username = args.read[1]
-    password = args.read[2]
+    tag = args.addpassword[0]
+    username = args.addpassword[1]
+    password = args.addpassword[2]
 
 def edit_tag(args):
-    tag = args.read[0]
-    username = args.read[1]
-    password = args.read[2]
+    tag = args.edittag[0]
+    username = args.edittag[1]
+    password = args.edittag[2]
 
 def delete_tag(args):
-    tag = args.read[0]
+    tag = args.deletetag[0]
 
 def show_password(args):
-    tag = args.read[0]
+    tag = args.showpassword[0]
 
 def delete_all():
     delete = 1
@@ -55,8 +55,8 @@ def close_vault():
 #                                                        Deleting vault                           --tobedone
 
 def delete_vault(args):
-    username = args.read[0]
-    master_password = args.read[1]
+    username = args.deletevault[0]
+    master_password = args.deletevault[1]
     auth.delete_user(username, master_password)
 
 # -----Description for the CLI(command line interface)-------

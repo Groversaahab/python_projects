@@ -10,23 +10,24 @@ def verify_master_password(username: str, password: str) -> bool:
     with open("./manager/username_data.json", "r") as file:
         loaded_dict = json.load(file)
         stored_hash = loaded_dict[username]
-        file.close()
-    return bcrypt.checkpw(password.encode("utf-8"), stored_hash)
+    return bcrypt.checkpw(password.encode("utf-8"), stored_hash.encode())
 
 def save_master_password(username: str, password: str):
     hashed_password = hash_master_password(password)
-    with open("./manager/username_data.json", "w+") as file:
+    with open("./manager/username_data.json", "r+") as file:
         loaded_dict = json.load(file)
-        loaded_dict[username] = hashed_password
-        json.dumps(loaded_dict, indent=4)
-        file.close()
+        loaded_dict[username] = hashed_password.decode()
+        file.seek(0)                           # go back to top of file
+        json.dump(loaded_dict, file, indent=4)      # overwrite with new data
+        file.truncate()
 
 def delete_user(username: str, password: str):
     if verify_master_password(username, password):
-        with open("./manager/username_data.json", "w+") as file:
+        with open("./manager/username_data.json", "r+") as file:
             loaded_dict = json.load(file)
             del loaded_dict[username]
-            json.dumps(loaded_dict, indent=4)
-            file.close()
+            file.seek(0)                           # go back to top of file
+            json.dump(loaded_dict, file, indent=4)      # overwrite with new data
+            file.truncate()
     else:
         print("Wrong master password!!!")
