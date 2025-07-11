@@ -52,7 +52,7 @@ def close_vault():
     close = 1
 
 # -----Deleting vault using master password--------      Deleting username and password from file --done
-#                                                        Deleting vault                           --done
+#                                                        Deleting vault                           --tobedone
 
 def delete_vault(args):
     username = args.read[0]
@@ -79,3 +79,24 @@ parser.add_argument("-dv", "--deletevault", type=str, nargs=2, metavar=("usernam
 # -----?????-----
 
 args = parser.parse_args()
+
+if args.newmaster != None:
+    new_master(args)
+elif args.vaultopen != None:
+    vault_open(args)
+elif args.addpassword != None:
+    add_password(args)
+elif args.edittag != None:
+    edit_tag(args)
+elif args.deletetag != None:
+    delete_tag(args)
+elif args.showpassword != None:
+    show_password(args)
+elif args.deleteall != None:
+    delete_all()
+elif args.showall != None:
+    show_all()
+elif args.closevault != None:
+    close_vault()
+elif args.deletevault != None:
+    delete_vault(args)
