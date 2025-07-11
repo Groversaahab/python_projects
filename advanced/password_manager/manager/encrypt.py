@@ -35,7 +35,7 @@ def decrypt_data(increpted_data: str, key: bytes) -> str:
 def save_key(key:bytes):
     with open("./manager/key.json", "r+") as file:
         loaded_list = json.load(file)
-        loaded_list.append(key)
+        loaded_list.append(key.decode())
         file.seek(0)                           # go back to top of file
         json.dump(loaded_list, file, indent=4)      # overwrite with new data
         file.truncate()
