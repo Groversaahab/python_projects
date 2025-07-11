@@ -100,7 +100,7 @@ subparsers.add_parser("sa", help="alias for showall")
 
 parser.add_argument("-dv", "--deletevault", type=str, nargs=2, metavar=("username", "masterpassword"), default="", help="Delete the given vault if password matches")
 
-# -----?????-----
+# -----Parse the input given by user(tells python to look for inputs)-----
 
 args = parser.parse_args()
 
