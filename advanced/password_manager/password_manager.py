@@ -27,7 +27,7 @@ def vault_open(args):
     master_password = args.vaultopen[1]
     if auth.verify_master_password(username, master_password):
         key = encrypt.derive_key(username, master_password)
-        encrypt.save_key(key)
+        encrypt.save_key(username, key)
         print("Vault opened!!")
     else:
         print("wrong master password!!!")
