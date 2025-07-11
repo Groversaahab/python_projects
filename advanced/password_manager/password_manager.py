@@ -1,6 +1,7 @@
 import argparse
 import sys
 from manager import auth
+from manager import encrypt
 
 # -----paths for the used files------
 
@@ -13,6 +14,7 @@ def new_master(args):
     username = args.newmaster[0]
     master_password = args.newmaster[1]
     auth.save_master_password(username, master_password)
+    print("New user added!!")
 
 # -----Opening Vault using master password--------         Passwored authentication --done
 #                                                          Opening vault            --tobedone
@@ -21,8 +23,9 @@ def vault_open(args):
     username = args.vaultopen[0]
     master_password = args.vaultopen[1]
     if auth.verify_master_password(username, master_password):
-        # Code
-        filler = 1
+        key = encrypt.derive_key(username, master_password)
+        encrypt.save_key(key)
+        print("Vault opened!!")
     else:
         print("wrong master password!!!")
 
@@ -58,6 +61,7 @@ def delete_vault(args):
     username = args.deletevault[0]
     master_password = args.deletevault[1]
     auth.delete_user(username, master_password)
+    print("User deleted!!")
 
 # -----Description for the CLI(command line interface)-------
 
