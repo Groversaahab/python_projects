@@ -53,7 +53,7 @@ def delete_tag(args):
 
 def show_password(args):
     tag = args.showpassword[0]
-    encrypt.vault_access(tag)
+    print(encrypt.vault_access(tag))
 
 def delete_all():
     [master_username, key] = encrypt.username_key_access()
@@ -70,7 +70,7 @@ def show_all():
         loaded_dict = json.load(file)
         for i in loaded_dict:
             encrypted_creds = loaded_dict[i]
-            decrypted_creds = [encrypt.decrypt_data(encrypted_creds[0]), encrypt.decrypt_data(decrypted_creds[1])]
+            decrypted_creds = [encrypt.decrypt_data(encrypted_creds[0], key), encrypt.decrypt_data(encrypted_creds[1], key)]
             print(decrypted_creds)
 
 # Add functionality for checking if vault already closed
@@ -87,14 +87,17 @@ def close_vault():
 def delete_vault(args):
     username = args.deletevault[0]
     master_password = args.deletevault[1]
-    auth.delete_user(username, master_password)
-    os.remove(f"./data/{username}.json")
-    print("User deleted!!")
+    if auth.verify_master_password(username,master_password):
+        auth.delete_user(username, master_password)
+        os.remove(f"./data/{username}.json")
+        print("User deleted!!")
+    else:
+        print("Wrong master password")
 
 # -----Description for the CLI(command line interface)-------
 
 parser = argparse.ArgumentParser(description="A password manager built using python")
-subparsers = parser.add_subparsers(dest="command", required=True)
+# subparsers = parser.add_subparsers(dest="command", required=True)
 
 # -----Commands for CLI------
 
@@ -107,16 +110,17 @@ parser.add_argument("-sh", "--showpassword", type=str, nargs=1, metavar="tag", d
 
 # added code
 
-subparsers.add_parser("closevault", help="Closes the currently open vault")
-subparsers.add_parser("cv", help="alias for closevault")
-subparsers.add_parser("deleteall", help="Deletes all data stored in the vault")
-subparsers.add_parser("da", help="alias for deleteall")
-subparsers.add_parser("showall", help="displays all data stored in the vault")
-subparsers.add_parser("sa", help="alias for showall")
+# subparsers.add_parser("closevault", help="Closes the currently open vault")
+# subparsers.add_parser("cv", help="alias for closevault")
+# subparsers.add_parser("deleteall", help="Deletes all data stored in the vault")
+# subparsers.add_parser("da", help="alias for deleteall")
+# subparsers.add_parser("showall", help="displays all data stored in the vault")
+# subparsers.add_parser("sa", help="alias for showall")
+# subparsers.add_parser("none", help="for using flags")
 
-# parser.add_argument("-da", "--deleteall", help="delete all data stored in vault")
-# parser.add_argument("-sa", "--showall", help="shows all data stored in vault")
-# parser.add_argument("-cv", "--closevault", help="Closes the currently open vault")
+parser.add_argument("-da", "--deleteall", action="store_true", help="delete all data stored in vault")
+parser.add_argument("-sa", "--showall", action="store_true", help="shows all data stored in vault")
+parser.add_argument("-cv", "--closevault",action="store_true" , help="Closes the currently open vault")
 
 parser.add_argument("-dv", "--deletevault", type=str, nargs=2, metavar=("username", "masterpassword"), default="", help="Delete the given vault if password matches")
 
@@ -136,11 +140,11 @@ elif args.deletetag != None:
     delete_tag(args)
 elif args.showpassword != None:
     show_password(args)
-elif args.command in ("deleteall", "da"):
+elif args.deleteall:
     delete_all()
-elif args.command in ("showall", "sa"):
+elif args.showall:
     show_all()
-elif args.command in ("closevault", "cv"):
+elif args.closevault:
     close_vault()
 elif args.deletevault != None:
     delete_vault(args)
