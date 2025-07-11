@@ -33,7 +33,7 @@ def decrypt_data(increpted_data: str, key: bytes) -> str:
     return decrypted_data
 
 def save_key(key:bytes):
-    with open("./manager/key.json", "r+") as file:
+    with open("./data/key.json", "r+") as file:
         loaded_list = json.load(file)
         loaded_list.append(key.decode())
         file.seek(0)                           # go back to top of file
@@ -41,7 +41,7 @@ def save_key(key:bytes):
         file.truncate()
 
 def delete_key():
-    with open("./manager/key.json", "r+") as file:
+    with open("./data/key.json", "r+") as file:
         loaded_list = json.load(file)
         loaded_list.pop()
         file.seek(0)                           # go back to top of file
