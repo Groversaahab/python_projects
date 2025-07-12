@@ -4,7 +4,7 @@ bin/
 include/
 lib/
 .vscode/
-advanced/password_manager/data/
+#advanced/password_manager/data/
 
 # Python cache
 __pycache__/
