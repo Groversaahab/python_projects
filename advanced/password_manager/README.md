@@ -58,4 +58,4 @@ Running order:
     Make sure to close vault after using your password manager.
 9.  Deleting user maybe done using -dv or --deletevault 
 
-Hope your passwords stay safe my password manager ;)
+Hope your passwords stay safe in my password manager ;)
