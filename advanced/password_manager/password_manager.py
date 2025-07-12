@@ -15,9 +15,10 @@ sys.path.append("./manager/")
 def new_master(args):
     username = args.newmaster[0]
     master_password = args.newmaster[1]
-    auth.save_master_password(username, master_password)
-    encrypt.create_vault(username)
-    print("New user added!!")
+    switch = auth.save_master_password(username, master_password)
+    if switch:
+        encrypt.create_vault(username)
+        print("New user added!!")
 
 # -----Opening Vault using master password--------         Passwored authentication --done
 #                                                          Opening vault            --tobedone
@@ -29,9 +30,14 @@ def vault_open(args):
     username = args.vaultopen[0]
     master_password = args.vaultopen[1]
     if auth.verify_master_password(username, master_password):
-        key = encrypt.derive_key(username, master_password)
-        encrypt.save_key(username, key)
-        print("Vault opened!!")
+        with open("./data/key.json", "r") as file:
+            loaded_list = json.load(file)
+            if len(loaded_list) == 0:
+                key = encrypt.derive_key(username, master_password)
+                encrypt.save_key(username, key)
+                print("Vault opened!!")
+            else:
+                print("Vault already open, please close it first!")
     else:
         print("wrong master password!!!")
 
@@ -41,11 +47,11 @@ def add_password(args):
     password = args.addpassword[2]
     encrypt.vault_append(tag, username, password)
 
-def edit_tag(args):
-    tag = args.edittag[0]
-    username = args.edittag[1]
-    password = args.edittag[2]
-    encrypt.vault_append(tag, username, password)
+# def edit_tag(args):
+#     tag = args.edittag[0]
+#     username = args.edittag[1]
+#     password = args.edittag[2]
+#     encrypt.vault_append(tag, username, password)
 
 def delete_tag(args):
     tag = args.deletetag[0]
@@ -57,6 +63,13 @@ def show_password(args):
 
 def delete_all():
     [master_username, key] = encrypt.username_key_access()
+    print("Once all credentials removed they cannot be retrieved are you sure you want to delete?(y/n)", end=" ")
+    answer = input()
+    if answer in ("Y", "y"):
+        print("Proceding with deleting")
+    elif answer in ("N", "n"):
+        print("Deleting cancelled")
+        return
     with open(f"./data/{master_username}.json", "r+") as file:
         loaded_dict = json.load(file)
         loaded_dict = {}
@@ -87,12 +100,20 @@ def close_vault():
 def delete_vault(args):
     username = args.deletevault[0]
     master_password = args.deletevault[1]
+    print("This cannot be undone are you sure you want to delete user?(y/n)", end=" ")
+    answer = input()
+    if answer in ("y", "Y"):
+        print("proceeding with deleting")
+    elif answer in ("n", "N"):
+        print("deleting cancelled")
+        return
     if auth.verify_master_password(username,master_password):
-        auth.delete_user(username, master_password)
-        os.remove(f"./data/{username}.json")
-        print("User deleted!!")
+        switch = auth.delete_user(username, master_password)
+        if switch:
+            os.remove(f"./data/{username}.json")
+            print("User deleted!!")
     else:
-        print("Wrong master password")
+        print("Wrong master password!!!")
 
 # -----Description for the CLI(command line interface)-------
 
@@ -104,7 +125,7 @@ parser = argparse.ArgumentParser(description="A password manager built using pyt
 parser.add_argument("-nm", "--newmaster", type=str, nargs=2, metavar=("new_username","masterpassword"), default=None, help="Generates a vault for the given username with the provided master password")
 parser.add_argument("-vo", "--vaultopen", type=str, nargs=2, metavar=("username", "masterpassword"), default=None, help="Open the vault for the user using the master password")
 parser.add_argument("-ad", "--addpassword", type=str, nargs=3, metavar=("tag", "username", "password"), default=None, help="Saves the username and password combo under a tag in the vault")
-parser.add_argument("-ed", "--edittag", type=str, nargs=3, metavar=("tag", "new/old_username", "newpassword"), default=None, help="Changes the username and password for the given tag")
+# parser.add_argument("-ed", "--edittag", type=str, nargs=3, metavar=("tag", "new/old_username", "newpassword"), default=None, help="Changes the username and password for the given tag")
 parser.add_argument("-dt", "--deletetag", type=str, nargs=1, metavar="tag", default=None, help="Deletes tag and the stored info with tag")
 parser.add_argument("-sh", "--showpassword", type=str, nargs=1, metavar="tag", default=None, help="Shows username and password linked to the tag")
 
@@ -134,8 +155,8 @@ elif args.vaultopen != None:
     vault_open(args)
 elif args.addpassword != None:
     add_password(args)
-elif args.edittag != None:
-    edit_tag(args)
+# elif args.edittag != None:
+#     edit_tag(args)
 elif args.deletetag != None:
     delete_tag(args)
 elif args.showpassword != None:

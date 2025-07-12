@@ -68,15 +68,22 @@ def vault_append(tag: str, username: str, password: str):
     encrypted_creds = [encrypted_username, encrypted_password]
     with open(f"./data/{master_username}.json", "r+") as file:
         loaded_dict = json.load(file)
-        loaded_dict[tag] = encrypted_creds
-        file.seek(0)                           # go back to top of file
-        json.dump(loaded_dict, file, indent=4)      # overwrite with new data
-        file.truncate()
+        if tag in loaded_dict:
+            print("please use another tag, this tag already exists!")
+        else:
+            loaded_dict[tag] = encrypted_creds
+            file.seek(0)                           # go back to top of file
+            json.dump(loaded_dict, file, indent=4)      # overwrite with new data
+            file.truncate()
+            print(f"Credentials with tag {tag} added!")
 
 def vault_access(tag: str) -> list:
     [master_username, key] = username_key_access()
     with open(f"./data/{master_username}.json", "r") as file:
         loaded_dict = json.load(file)
+        if tag not in loaded_dict:
+            print(f"No credentials with tag {tag} in vault")
+            return []
         encrypted_creds = loaded_dict[tag]
     decrypted_username = decrypt_data(encrypted_creds[0], key)
     decrypted_password = decrypt_data(encrypted_creds[1], key)
@@ -87,7 +94,11 @@ def vault_del(tag:str):
     [master_username, key] = username_key_access()
     with open(f"./data/{master_username}.json", "r+") as file:
         loaded_dict = json.load(file)
-        del loaded_dict[tag]
-        file.seek(0)
-        json.dump(loaded_dict, file, indent=4)
-        file.truncate()
+        if tag in loaded_dict:
+            del loaded_dict[tag]
+            file.seek(0)
+            json.dump(loaded_dict, file, indent=4)
+            file.truncate()
+            print(f"Credentials with tag {tag} deleted!!")
+        else:
+            print(f"No credentials with tag {tag} in vault")
