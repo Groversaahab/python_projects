@@ -42,19 +42,19 @@ These are the availabe flags, these may also be accessed using "-h" flag using t
                         Delete the given vault if password matches 
 
 Running order:
-1.  First we need to make a new user (master) with a strong password using -nm/--newmaster we add a new user to our user database
-    This password must be strong because this will be used for encrypting the save credentials
-    This password must never be forgotten
+1.  First we need to make a new user (master) with a strong password using -nm/--newmaster we add a new user to our user database \
+    This password must be strong because this will be used for encrypting the save credentials \
+    This password must never be forgotten \
     This also makes a vault where the credentials will be saved (encrypted json file)
 2.  Once a new user is made we need to open the vault to start saving our passwords in it. Use -vo or --vaultopen to open your vault
-3.  Once vault is opened we can now add credentials with a unique tag (user decided) to our vault using -ad or --addpassword flags. 
+3.  Once vault is opened we can now add credentials with a unique tag (user decided) to our vault using -ad or --addpassword flags. \
     Tag should be unique and east to remember because it will be used to access your credentials later.
-4.  To delete a credential use -dt or --deletetag with the tag of the credentials to delete.
+4.  To delete a credential use -dt or --deletetag with the tag of the credentials to delete. \
     This cannot be reversed, hence be careful.
 5.  To access your credentials use -sh or --showpassword to get the credential linked to the tag provided.
 6.  You may acccess all your data with -sa --showall
 7.  Caution: Please use -ad, -dt, -sh, -da and -sa only with vault open otherwise it will throw error
-8.  Once vault usage is finished, close to vault using -cv ar --closevault.
+8.  Once vault usage is finished, close to vault using -cv ar --closevault. \
     Make sure to close vault after using your password manager.
 9.  Deleting user maybe done using -dv or --deletevault 
 
