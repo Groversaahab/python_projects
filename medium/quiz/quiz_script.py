@@ -1,5 +1,5 @@
 import openpyxl
-import openpyxl.workbook
+from openpyxl import Workbook
 import os
 
 class question:
@@ -36,8 +36,8 @@ def intro() -> list:
     return [user_name, quiz_genre, quiz_title, quiz_difficulty, quiz_question_difficulty]
 
 def excel_file_initialising(user_name: str):
-    xlfile = openpyxl.workbook()
-    xlfile.save(f"./quiz_data/{user_name}.xlsx")
+    xlfile = Workbook()
+    xlfile.save(filename=f"./quiz_data/{user_name}.xlsx")
 
 def excel_file_format(xlsheet, custom_dif, quiz_genre, quiz_difficulty):
     h1 = ["Quiz Genre", "Quiz difficulty", "Custom question difficulty"]
@@ -72,6 +72,7 @@ def question_maker(custom_dif: bool, quiz_difficulty: str, quiz_genre: str) -> l
                 reply_ans = True
             else:
                 reply_ans = False
+        reply_ans = True
         if quiz_genre == "mix":
             print("Please type in the question genre:", end=" ")
             ques_genre = input()
@@ -88,7 +89,7 @@ def question_maker(custom_dif: bool, quiz_difficulty: str, quiz_genre: str) -> l
             neg_mark = True
         else:
             neg_mark = False
-        Q = question(ans, ques_genre, ques_dif, neg_mark)
+        Q = question(ques=ques, ans=ans, genre=ques_genre, difficulty=ques_dif, neg_mark=neg_mark)
         questions.append(Q)
         print("Do you want to add another question?(y/n):", end=" ")
         next_ques = input()
@@ -98,8 +99,23 @@ def question_maker(custom_dif: bool, quiz_difficulty: str, quiz_genre: str) -> l
             reply = False
     return questions
 
-def question_saver(questions: list, sheet):
-    pass        # Add code
+def question_saver(questions: list, xlsheet, custom_dif: bool):
+    for i in range(len(questions)):
+        if custom_dif:
+            xlsheet.cell(row=(i+5), column=1).value = questions[i].question
+            xlsheet.cell(row=(i+5), column=2).value = questions[i].difficulty
+            xlsheet.cell(row=(i+5), column=3).value = questions[i].points
+            xlsheet.cell(row=(i+5), column=4).value = questions[i].genre
+            xlsheet.cell(row=(i+5), column=5).value = questions[i].neg_score
+            for j in range(len(questions[i].answer)):
+                xlsheet.cell(row=(i+5), column=j+6).value = questions[i].answer[j]
+        else:
+            xlsheet.cell(row=(i+5), column=1).value = questions[i].question
+            xlsheet.cell(row=(i+5), column=2).value = questions[i].points
+            xlsheet.cell(row=(i+5), column=3).value = questions[i].genre
+            xlsheet.cell(row=(i+5), column=4).value = questions[i].neg_score
+            for j in range(len(questions[i].answer)):
+                xlsheet.cell(row=(i+5), column=j+5).value = questions[i].answer[j]
 
 def main():
     [user_name, quiz_genre, quiz_title, quiz_difficulty, custom_question_difficulty] = intro()
@@ -121,7 +137,9 @@ def main():
 
     questions = question_maker(custom_question_difficulty, quiz_difficulty, quiz_genre)
 
+    question_saver(questions, sheet, custom_question_difficulty)
 
+    xlfile.save(filename=f"./quiz_data/{user_name}.xlsx")
 
 if __name__ == "__main__":
     main()
