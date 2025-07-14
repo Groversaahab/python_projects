@@ -54,7 +54,7 @@ def excel_file_format(xlsheet, custom_dif, quiz_genre, quiz_difficulty):
     for i in range(len(h2)):
         xlsheet.cell(row=4, column=(i+1)).value = h2[i]
 
-def quistion_maker(custom_dif: bool, quiz_difficulty: str, quiz_genre: str) -> question:
+def question_maker(custom_dif: bool, quiz_difficulty: str, quiz_genre: str) -> list:
     print("Let's start with noting your questions")
     reply = True
     reply_ans = True
@@ -96,6 +96,10 @@ def quistion_maker(custom_dif: bool, quiz_difficulty: str, quiz_genre: str) -> q
             reply = True
         else:
             reply = False
+    return questions
+
+def question_saver(questions: list, sheet):
+    pass        # Add code
 
 def main():
     [user_name, quiz_genre, quiz_title, quiz_difficulty, custom_question_difficulty] = intro()
@@ -114,6 +118,9 @@ def main():
         sheet.title = quiz_title
     
     excel_file_format(sheet, custom_question_difficulty, quiz_genre, quiz_difficulty)
+
+    questions = question_maker(custom_question_difficulty, quiz_difficulty, quiz_genre)
+
 
 
 if __name__ == "__main__":
