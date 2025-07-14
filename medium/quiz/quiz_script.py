@@ -9,14 +9,16 @@ class question:
         self.genre = genre
         self.difficulty = difficulty
         self.neg_mark = neg_mark
-
-    def points(dif:str):
-        if dif == "hard":
-            return 3
-        elif dif == "medium":
-            return 2
+        if difficulty == "hard":
+            self.points = 3
+        elif difficulty == "medium":
+            self.points = 2
         else:
-            return 1
+            self.points = 1
+        if neg_mark:
+            self.neg_score = (self.points)/4
+        else:
+            self.neg_score = 0
 
 def intro() -> list:
     print("Hi, welcome to quiz maker")
@@ -53,7 +55,47 @@ def excel_file_format(xlsheet, custom_dif, quiz_genre, quiz_difficulty):
         xlsheet.cell(row=4, column=(i+1)).value = h2[i]
 
 def quistion_maker(custom_dif: bool, quiz_difficulty: str, quiz_genre: str) -> question:
-    pass
+    print("Let's start with noting your questions")
+    reply = True
+    reply_ans = True
+    questions = []
+    while reply:
+        ans = []
+        print("Please type in your question:", end=" ")
+        ques = input()
+        while reply_ans:
+            print("Please type in your answer:", end=" ")
+            ans.append(input())
+            print("Do you want to provide any other answer?(y/n)", end=" ")
+            optional_ans = input()
+            if optional_ans == "y":
+                reply_ans = True
+            else:
+                reply_ans = False
+        if quiz_genre == "mix":
+            print("Please type in the question genre:", end=" ")
+            ques_genre = input()
+        else:
+            ques_genre = quiz_genre
+        if custom_dif:
+            print("Please type in question difficulty:", end=" ")
+            ques_dif = input()
+        else:
+            ques_dif = quiz_difficulty
+        print("Do you want to add neg marking to the question?(y/n):", end=" ")
+        neg_mark = input()
+        if neg_mark == "y":
+            neg_mark = True
+        else:
+            neg_mark = False
+        Q = question(ans, ques_genre, ques_dif, neg_mark)
+        questions.append(Q)
+        print("Do you want to add another question?(y/n):", end=" ")
+        next_ques = input()
+        if next_ques == "y":
+            reply = True
+        else:
+            reply = False
 
 def main():
     [user_name, quiz_genre, quiz_title, quiz_difficulty, custom_question_difficulty] = intro()
